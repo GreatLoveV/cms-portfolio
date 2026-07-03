@@ -1,0 +1,24 @@
+info:
+  name: Update Project
+  type: http
+  seq: 2
+
+http:
+  method: PUT
+  url: http://localhost:3003/api/projects/6a466b76537250495246b84b
+  body:
+    type: json
+    data: |-
+      {
+        "title": "Content Management Service",
+        "description": "My personal cms Portfolio, to showcase my projects and easily add future works to better my chances at finding a job",
+        "date": "7/2/2026",
+        "technologies": ["Typescript", "Express", "MongoDb", "React"]
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,0 +1,24 @@
+info:
+  name: New Project
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: http://localhost:3003/api/projects
+  body:
+    type: json
+    data: |-
+      {
+        "title": "E-Commerce Platform",
+        "description": "A full-stack e-commerce application with user authentication, product management, shopping cart, and Stripe payment integration.",
+        "date": "3/15/2025",
+        "technologies": ["React", "Node.js", "MongoDB", "Stripe", "Tailwind CSS"]
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
