@@ -1,14 +1,18 @@
 import express from "express";
 import type { Response, Request } from "express";
-import projectService from "../services/projectService.ts";
 import Project from "../models/project.ts";
 import type { ApiError, ProjectEntry } from "../types.ts";
 
 const router = express.Router();
 
-router.get("/", (_req, res) => {
-  const projects = projectService.getAll();
+router.get("/", async (_req, res) => {
+  const projects = await Project.find({});
   res.status(200).json(projects);
+});
+
+router.get("/:id", async (req, res) => {
+  const project = await Project.findById(req.params.id);
+  res.status(200).json(project);
 });
 
 router.post(
