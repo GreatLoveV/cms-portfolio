@@ -1,10 +1,11 @@
 import dotenv from "dotenv";
 dotenv.config();
-
 import dns from "node:dns";
 import express, { type Request, type Response } from "express";
 import mongoose from "mongoose";
 import projectsRouter from "./routes/projects.ts";
+import aboutRouter from "./routes/about.ts";
+import { unknownEndpoint, errorMiddleware } from "./middleware.ts";
 
 dns.setServers(["1.1.1.1", "8.8.8.8"]);
 
@@ -26,6 +27,10 @@ app.get("/ping", (_req: Request, res: Response) => {
 });
 
 app.use("/api/projects", projectsRouter);
+app.use("/api/about", aboutRouter);
+app.use(unknownEndpoint);
+app.use(errorMiddleware);
+
 const PORT = 3003;
 
 app.listen(PORT, () => {
