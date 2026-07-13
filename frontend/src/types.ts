@@ -1,5 +1,4 @@
-export interface ProjectEntry {
-  id: string;
+export interface NewProjectEntry {
   title: string;
   description: string;
   date: string;
@@ -8,6 +7,9 @@ export interface ProjectEntry {
   githubUrl?: string;
   image?: string;
   featured: boolean;
+}
+export interface ProjectEntry extends NewProjectEntry {
+  id: string;
 }
 
 export interface AboutEntry {

@@ -12,7 +12,7 @@ const Navbar = () => {
   return (
     <nav className="sticky top-0 z-10 bg-neutral-950/80 backdrop-blur border-b border-white/10">
       <div className="max-w-4xl mx-auto px-6 h-16 flex items-center gap-8">
-        <span className="text-white font-medium">My Portfolio</span>
+        <span className="text-lg text-white font-medium">My Portfolio</span>
         <div className="flex gap-6 ml-auto">
           <Link to="/" className={linkClass("/")}>
             Projects
