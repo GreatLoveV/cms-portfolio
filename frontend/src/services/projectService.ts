@@ -12,4 +12,21 @@ const create = async (newProject: NewProjectEntry): Promise<ProjectEntry> => {
   return response.data;
 };
 
-export default { getAll, create };
+const update = async (
+  id: string,
+  newProject: NewProjectEntry,
+): Promise<ProjectEntry> => {
+  const response = await axios.put<ProjectEntry>(
+    `${baseUrl}/${id}`,
+    newProject,
+  );
+
+  return response.data;
+};
+
+const remove = async (id: string) => {
+  const response = await axios.delete(id);
+  return response.data;
+};
+
+export default { getAll, create, update, remove };

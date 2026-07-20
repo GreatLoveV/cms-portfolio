@@ -37,6 +37,13 @@ export type NewAboutEntry = z.infer<typeof newAboutSchema>;
 export interface AboutEntry extends NewAboutEntry {
   updatedAt: Date;
 }
+
+export const newLoginSchema = z.object({
+  username: z.string().min(1),
+  password: z.string().min(1),
+});
+
+export type LoginBody = z.infer<typeof newLoginSchema>;
 export interface ApiError {
   error: string;
 }

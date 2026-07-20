@@ -1,5 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
-import { newProjectSchema, newAboutSchema } from "./types.ts";
+import { newProjectSchema, newAboutSchema, newLoginSchema } from "./types.ts";
+import jwt from "jsonwebtoken";
 import { z } from "zod";
 
 export const newProjectParser = (
@@ -15,6 +16,37 @@ export const newProjectParser = (
   }
 };
 
+export const newLoginParser = (
+  req: Request,
+  _res: Response,
+  next: NextFunction,
+) => {
+  try {
+    newLoginSchema.parse(req.body);
+    next();
+  } catch (error: unknown) {
+    next(error);
+  }
+};
+
+export const requireAuth = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const authHeader = req.get("Authorization");
+  const token = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
+  if (!token) {
+    return res.status(401).json({ error: "token missing" });
+  }
+
+  try {
+    jwt.verify(token, process.env.SECRET as string);
+    return next();
+  } catch {
+    return res.status(401).json({ error: "invalid token" });
+  }
+};
 export const newAboutParser = (
   req: Request,
   _res: Response,

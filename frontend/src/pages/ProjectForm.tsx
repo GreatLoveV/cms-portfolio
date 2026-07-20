@@ -1,21 +1,44 @@
 import useField from "../hooks/useField";
 import { useState, type ChangeEvent, type FormEvent } from "react";
-import { useCreateProject } from "../hooks/useProjects";
-import type { NewProjectEntry } from "../types";
+import { useCreateProject, useUpdateProject } from "../hooks/useProjects";
+import type { NewProjectEntry, ProjectEntry } from "../types";
 
-const ProjectForm = ({ onSuccess }: { onSuccess?: () => void }) => {
-  const mutation = useCreateProject();
+interface ProjectFormProps {
+  onSuccess?: () => void;
+  project?: ProjectEntry;
+}
+const ProjectForm = ({ onSuccess, project }: ProjectFormProps) => {
+  const isEditing = !!project;
+  const { inputProps: title, reset: resetTitle } = useField(
+    "text",
+    project?.title ?? "",
+  );
+  const { inputProps: description, reset: resetDescription } = useField(
+    "text",
+    project?.description ?? "",
+  );
+  const { inputProps: date, reset: resetDate } = useField(
+    "date",
+    project?.date ?? "",
+  );
+  const { inputProps: technologies, reset: resetTechnologies } = useField(
+    "text",
+    project?.technologies.join(",") ?? "",
+  );
+  const { inputProps: liveUrl, reset: resetLiveUrl } = useField(
+    "url",
+    project?.liveUrl ?? "",
+  );
+  const { inputProps: githubUrl, reset: resetGithubUrl } = useField(
+    "url",
+    project?.githubUrl ?? "",
+  );
+  const { inputProps: image, reset: resetImage } = useField(
+    "url",
+    project?.image ?? "",
+  );
 
-  const { inputProps: title, reset: resetTitle } = useField("text");
-  const { inputProps: description, reset: resetDescription } = useField("text");
-  const { inputProps: date, reset: resetDate } = useField("date");
-  const { inputProps: technologies, reset: resetTechnologies } =
-    useField("text");
-  const { inputProps: liveUrl, reset: resetLiveUrl } = useField("url");
-  const { inputProps: githubUrl, reset: resetGithubUrl } = useField("url");
-  const { inputProps: image, reset: resetImage } = useField("url");
-
-  const [featured, setFeatured] = useState(false);
+  const [featured, setFeatured] = useState(project?.featured || false);
 
   const handleFeaturedChange = (event: ChangeEvent<HTMLInputElement>) => {
     setFeatured(event.target.checked);
@@ -31,11 +54,15 @@ const ProjectForm = ({ onSuccess }: { onSuccess?: () => void }) => {
     resetImage();
     setFeatured(false);
   };
+  const createMutation = useCreateProject();
+  const updateMutation = useUpdateProject();
+
+  const mutation = isEditing ? updateMutation : createMutation;
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
 
-    const newProject: NewProjectEntry = {
+    const projectData: NewProjectEntry = {
       title: title.value,
       description: description.value,
       date: date.value,
@@ -49,12 +76,19 @@ const ProjectForm = ({ onSuccess }: { onSuccess?: () => void }) => {
       featured,
     };
 
-    mutation.mutate(newProject, {
-      onSuccess: () => {
-        resetAll();
-        onSuccess?.();
-      },
-    });
+    if (isEditing && project) {
+      updateMutation.mutate(
+        { id: project.id, project: projectData },
+        { onSuccess: () => onSuccess?.() },
+      );
+    } else {
+      createMutation.mutate(projectData, {
+        onSuccess: () => {
+          onSuccess?.();
+          resetAll();
+        },
+      });
+    }
   };
 
   return (
@@ -138,7 +172,11 @@ const ProjectForm = ({ onSuccess }: { onSuccess?: () => void }) => {
         disabled={mutation.isPending}
         className="mt-2 bg-teal-500 hover:bg-teal-400 disabled:opacity-50 text-neutral-950 font-medium rounded-md px-4 py-2 transition-colors"
       >
-        {mutation.isPending ? "Saving..." : "Create project"}
+        {mutation.isPending
+          ? "Saving..."
+          : isEditing
+            ? "Save Changes"
+            : "Create project"}
       </button>
 
       {mutation.isError && (

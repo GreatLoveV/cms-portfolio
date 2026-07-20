@@ -1,7 +1,7 @@
 import About from "../models/about.ts";
 import type { Response, Request } from "express";
 import express from "express";
-import { newAboutParser } from "../middleware.ts";
+import { newAboutParser, requireAuth } from "../middleware.ts";
 import type { NewAboutEntry, AboutEntry, ApiError } from "../types.ts";
 
 const router = express.Router();
@@ -22,6 +22,7 @@ router.get("/", async (_req, res: Response<AboutEntry | ApiError>) => {
 router.put(
   "/",
   newAboutParser,
+  requireAuth,
   async (
     req: Request<unknown, unknown, NewAboutEntry>,
     res: Response<AboutEntry | ApiError>,

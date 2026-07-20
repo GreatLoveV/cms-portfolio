@@ -2,7 +2,7 @@ import express from "express";
 import type { Response, Request } from "express";
 import Project from "../models/project.ts";
 import type { ApiError, ProjectEntry, NewProjectEntry } from "../types.ts";
-import { newProjectParser } from "../middleware.ts";
+import { newProjectParser, requireAuth } from "../middleware.ts";
 const router = express.Router();
 
 router.get("/", async (_req, res: Response<ProjectEntry[] | ApiError>) => {
@@ -36,6 +36,7 @@ router.get(
 
 router.post(
   "/",
+  requireAuth,
   newProjectParser,
   async (
     req: Request<unknown, unknown, NewProjectEntry>,
@@ -55,6 +56,7 @@ router.post(
 router.put(
   "/:id",
   newProjectParser,
+  requireAuth,
   async (
     req: Request<{ id: string }, unknown, NewProjectEntry>,
     res: Response<ProjectEntry | ApiError>,
@@ -78,6 +80,7 @@ router.put(
 
 router.delete(
   "/:id",
+  requireAuth,
   async (
     req: Request<{ id: string }, unknown, unknown>,
     res: Response<ProjectEntry | ApiError>,

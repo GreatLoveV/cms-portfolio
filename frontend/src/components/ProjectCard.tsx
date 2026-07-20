@@ -3,9 +3,10 @@ import type { ProjectEntry } from "../types";
 
 interface ProjectCardProps {
   project: ProjectEntry;
+  onEdit?: (project: ProjectEntry) => void;
 }
 
-const ProjectCard = ({ project }: ProjectCardProps) => {
+const ProjectCard = ({ project, onEdit }: ProjectCardProps) => {
   return (
     <div className="bg-neutral-900 border border-white/10 rounded-lg p-6 flex flex-col gap-3 ">
       {project.image && (
@@ -15,7 +16,18 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
           className="w-full h-48  object-cover"
         />
       )}
-      <h3 className="text-lg text-white font-medium">{project.title}</h3>
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg text-white font-medium">{project.title}</h3>
+        {onEdit && (
+          <button
+            onClick={() => onEdit(project)}
+            className="text-neutral-400 hover:text-white transition-colors"
+            aria-label="Edit project"
+          >
+            ✎
+          </button>
+        )}
+      </div>
       <p className="text-sm text-neutral-400 leading-relaxed">
         {project.description}
       </p>

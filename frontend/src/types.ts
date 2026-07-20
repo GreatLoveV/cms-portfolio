@@ -12,7 +12,7 @@ export interface ProjectEntry extends NewProjectEntry {
   id: string;
 }
 
-export interface AboutEntry {
+export interface NewAboutEntry {
   name: string;
   title: string;
   shortBio: string;
@@ -23,5 +23,7 @@ export interface AboutEntry {
   socialLinks: { platform: string; url: string }[];
   location?: string;
   availableForWork: boolean;
+}
+export interface AboutEntry extends NewAboutEntry {
   updatedAt: Date;
 }

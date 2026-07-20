@@ -19,3 +19,14 @@ export const useCreateProject = () => {
     },
   });
 };
+
+export const useUpdateProject = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, project }: { id: string; project: NewProjectEntry }) =>
+      pService.update(id, project),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
+    },
+  });
+};

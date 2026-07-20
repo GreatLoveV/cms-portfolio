@@ -1,8 +1,14 @@
+import { useState } from "react";
 import { useGetAbout } from "../hooks/useAbout";
+import AboutForm from "./AboutForm";
 
 const About = () => {
   const { isLoading, isError, error, data } = useGetAbout();
+  const [showForm, setShowForm] = useState(false);
 
+  const closeForm = () => {
+    setShowForm(false);
+  };
   if (isLoading)
     return <div className="text-neutral-400 p-6">is loading...</div>;
   if (isError)
@@ -13,7 +19,16 @@ const About = () => {
   if (!about)
     return <div className="text-neutral-400 p-6">No about info yet.</div>;
   return (
-    <div className="max-w-2xl mx-auto px-6 py-12 flex flex-col gap-8">
+    <div className="relative max-w-2xl mx-auto px-6 py-12 flex flex-col gap-8">
+      <button
+        className="absolute top-4 right-4 text-neutral-400 hover:text-white bg-white/5 rounded-full  w-8 h-8  flex items-center justify-center"
+        aria-label="Edit about info"
+        onClick={() => {
+          setShowForm(true);
+        }}
+      >
+        ✎
+      </button>
       <div className="flex flex-col items-center text-center gap-4">
         {about.profileImage && (
           <img
@@ -90,6 +105,22 @@ const About = () => {
           })}
         </ul>
       </div>
+
+      {showForm && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-20 p-6">
+          <div className="relative w-full max-w-lg">
+            <button
+              onClick={closeForm}
+              className="absolute -top-3 -right-3 bg-neutral-800 text-white  rounded-full w-8 h-8 flex items-center justify-center hover:bg-neutral-700"
+              aria-label="close"
+            >
+              ✕
+            </button>
+
+            <AboutForm about={about} onSuccess={closeForm} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
