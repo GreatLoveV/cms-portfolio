@@ -3,7 +3,7 @@ import type { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { newLoginParser } from "../middleware.ts";
-import { LoginBody } from "../types.ts";
+import { type LoginBody } from "../types.ts";
 
 const router = express.Router();
 

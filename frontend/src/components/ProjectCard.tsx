@@ -1,4 +1,5 @@
 // components/ProjectCard.tsx
+import { useAuth } from "../hooks/useAuth";
 import type { ProjectEntry } from "../types";
 
 interface ProjectCardProps {
@@ -7,6 +8,7 @@ interface ProjectCardProps {
 }
 
 const ProjectCard = ({ project, onEdit }: ProjectCardProps) => {
+  const { token } = useAuth();
   return (
     <div className="bg-neutral-900 border border-white/10 rounded-lg p-6 flex flex-col gap-3 ">
       {project.image && (
@@ -18,7 +20,7 @@ const ProjectCard = ({ project, onEdit }: ProjectCardProps) => {
       )}
       <div className="flex items-center justify-between">
         <h3 className="text-lg text-white font-medium">{project.title}</h3>
-        {onEdit && (
+        {token && onEdit && (
           <button
             onClick={() => onEdit(project)}
             className="text-neutral-400 hover:text-white transition-colors"

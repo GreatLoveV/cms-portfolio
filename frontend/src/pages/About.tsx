@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useGetAbout } from "../hooks/useAbout";
 import AboutForm from "./AboutForm";
+import { useAuth } from "../hooks/useAuth";
 
 const About = () => {
   const { isLoading, isError, error, data } = useGetAbout();
   const [showForm, setShowForm] = useState(false);
-
+  const { token } = useAuth();
   const closeForm = () => {
     setShowForm(false);
   };
@@ -20,15 +21,17 @@ const About = () => {
     return <div className="text-neutral-400 p-6">No about info yet.</div>;
   return (
     <div className="relative max-w-2xl mx-auto px-6 py-12 flex flex-col gap-8">
-      <button
-        className="absolute top-4 right-4 text-neutral-400 hover:text-white bg-white/5 rounded-full  w-8 h-8  flex items-center justify-center"
-        aria-label="Edit about info"
-        onClick={() => {
-          setShowForm(true);
-        }}
-      >
-        ✎
-      </button>
+      {token && (
+        <button
+          className="absolute top-4 right-4 text-neutral-400 hover:text-white bg-white/5 rounded-full  w-8 h-8  flex items-center justify-center"
+          aria-label="Edit about info"
+          onClick={() => {
+            setShowForm(true);
+          }}
+        >
+          ✎
+        </button>
+      )}
       <div className="flex flex-col items-center text-center gap-4">
         {about.profileImage && (
           <img

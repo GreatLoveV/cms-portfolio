@@ -3,6 +3,7 @@ import ProjectCard from "../components/ProjectCard";
 import { useState } from "react";
 import ProjectForm from "./ProjectForm";
 import type { ProjectEntry } from "../types";
+import { useAuth } from "../hooks/useAuth";
 
 const Projects = () => {
   const { data, isLoading, isError, error } = useGetProjects();
@@ -10,6 +11,7 @@ const Projects = () => {
   const [editingProject, setEditingProject] = useState<ProjectEntry | null>(
     null,
   );
+  const { token } = useAuth();
   const openCreateForm = () => {
     setEditingProject(null);
     setShowForm(true);
@@ -32,12 +34,14 @@ const Projects = () => {
     <div className="max-w-5xl mx-auto px-6 py-12">
       <div className="flex items-center justify-between mb-8">
         <h1 className=" text-2xl font-medium text-white">Projects</h1>
-        <button
-          onClick={openCreateForm}
-          className="bg-teal-500 hover:bg-teal-400 text-neutral-950 font-medium rounded-md px-4 py-2 transition-colors"
-        >
-          New Project
-        </button>
+        {token && (
+          <button
+            onClick={openCreateForm}
+            className="bg-teal-500 hover:bg-teal-400 text-neutral-950 font-medium rounded-md px-4 py-2 transition-colors"
+          >
+            New Project
+          </button>
+        )}
       </div>
 
       {projects.length === 0 ? (
