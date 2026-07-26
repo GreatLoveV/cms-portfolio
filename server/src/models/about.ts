@@ -43,4 +43,13 @@ const aboutSchema = new Schema<IAbout>(
   },
   { timestamps: { createdAt: false, updatedAt: true } },
 );
+
+aboutSchema.set("toJSON", {
+  transform: (_doc, returnedObject) => {
+    const obj = returnedObject as unknown as Record<string, unknown>;
+    obj.id = obj._id;
+    delete obj._id;
+    delete obj.__v;
+  },
+});
 export default model<IAbout>("About", aboutSchema);

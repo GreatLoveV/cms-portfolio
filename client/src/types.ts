@@ -8,6 +8,7 @@ export interface NewProjectEntry {
   image?: string;
   featured: boolean;
 }
+
 export interface ProjectEntry extends NewProjectEntry {
   id: string;
 }
@@ -24,6 +25,7 @@ export interface NewAboutEntry {
   location?: string;
   availableForWork: boolean;
 }
+
 export interface AboutEntry extends NewAboutEntry {
-  updatedAt: Date;
+  updatedAt: string;
 }

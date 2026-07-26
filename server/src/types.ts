@@ -10,12 +10,12 @@ export const newProjectSchema = z.object({
   image: z.string().optional(),
   featured: z.boolean(),
 });
-
 export type NewProjectEntry = z.infer<typeof newProjectSchema>;
 
-export interface ProjectEntry extends NewProjectEntry {
-  id: string;
-}
+export const projectSchema = newProjectSchema.extend({
+  id: z.string(),
+});
+export type ProjectEntry = z.infer<typeof projectSchema>;
 
 export const newAboutSchema = z.object({
   name: z.string().min(1),
@@ -31,19 +31,42 @@ export const newAboutSchema = z.object({
   location: z.string().optional(),
   availableForWork: z.boolean(),
 });
-
 export type NewAboutEntry = z.infer<typeof newAboutSchema>;
+export const aboutSchema = newAboutSchema.extend({
+  updatedAt: z.date(),
+});
+export type AboutEntry = z.infer<typeof aboutSchema>;
 
-export interface AboutEntry extends NewAboutEntry {
-  updatedAt: Date;
-}
+export const SUBJECTS = {
+  FREELANCE: "Freelance Project",
+  FULLTIME: "Full-time Opportunity",
+  COLLAB: "Collaboration",
+  HELLO: "Just saying hi",
+} as const;
+
+export type SubjectKey = (typeof SUBJECTS)[keyof typeof SUBJECTS];
+
+export const newContactSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters").max(50),
+  email: z.string().email("Please enter a valid email address"),
+  subject: z.enum(Object.values(SUBJECTS) as [string, ...string[]]),
+  message: z.string().min(20, "Give me a little more detail").max(2000),
+  honeypot: z.literal(""),
+});
+export type NewContactEntry = z.infer<typeof newContactSchema>;
+
+export const contactSchema = newContactSchema.extend({
+  id: z.string(),
+  createdAt: z.date(),
+});
+export type ContactEntry = z.infer<typeof contactSchema>;
 
 export const newLoginSchema = z.object({
   username: z.string().min(1),
   password: z.string().min(1),
 });
-
 export type LoginBody = z.infer<typeof newLoginSchema>;
+
 export interface ApiError {
   error: string;
 }

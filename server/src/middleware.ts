@@ -1,5 +1,10 @@
 import type { Request, Response, NextFunction } from "express";
-import { newProjectSchema, newAboutSchema, newLoginSchema } from "./types.ts";
+import {
+  newProjectSchema,
+  newAboutSchema,
+  newContactSchema,
+  newLoginSchema,
+} from "./types.ts";
 import jwt from "jsonwebtoken";
 import { z } from "zod";
 
@@ -9,7 +14,19 @@ export const newProjectParser = (
   next: NextFunction,
 ) => {
   try {
-    newProjectSchema.parse(req.body);
+    req.body = newProjectSchema.parse(req.body);
+    next();
+  } catch (error: unknown) {
+    next(error);
+  }
+};
+export const newContactParser = (
+  req: Request,
+  _res: Response,
+  next: NextFunction,
+) => {
+  try {
+    req.body = newContactSchema.parse(req.body);
     next();
   } catch (error: unknown) {
     next(error);
@@ -22,7 +39,7 @@ export const newLoginParser = (
   next: NextFunction,
 ) => {
   try {
-    newLoginSchema.parse(req.body);
+    req.body = newLoginSchema.parse(req.body);
     next();
   } catch (error: unknown) {
     next(error);
@@ -53,7 +70,7 @@ export const newAboutParser = (
   next: NextFunction,
 ) => {
   try {
-    newAboutSchema.parse(req.body);
+    req.body = newAboutSchema.parse(req.body);
     next();
   } catch (error: unknown) {
     next(error);

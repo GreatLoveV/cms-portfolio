@@ -1,4 +1,3 @@
-// components/ProjectCard.tsx
 import { useAuth } from "../hooks/useAuth";
 import type { ProjectEntry } from "../types";
 
