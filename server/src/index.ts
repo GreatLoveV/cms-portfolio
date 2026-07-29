@@ -6,6 +6,8 @@ import mongoose from "mongoose";
 import projectsRouter from "./routes/projects.ts";
 import aboutRouter from "./routes/about.ts";
 import loginRouter from "./routes/login.ts";
+import contactRouter from "./routes/contact.ts";
+
 import { unknownEndpoint, errorMiddleware } from "./middleware.ts";
 
 dns.setServers(["1.1.1.1", "8.8.8.8"]);
@@ -30,6 +32,7 @@ app.get("/ping", (_req: Request, res: Response) => {
 app.use("/api/projects", projectsRouter);
 app.use("/api/about", aboutRouter);
 app.use("/api/login", loginRouter);
+app.use("/api/contact", contactRouter);
 app.use(unknownEndpoint);
 app.use(errorMiddleware);
 

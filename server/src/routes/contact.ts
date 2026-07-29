@@ -58,3 +58,25 @@ router.post(
     }
   },
 );
+
+router.delete(
+  "/:id",
+  requireAuth,
+  async (
+    req: Request<{ id: string }>,
+    res: Response<ContactEntry | ApiError>,
+  ) => {
+    try {
+      const contact = await Contact.findByIdAndDelete(req.params.id);
+      if (!contact) {
+        return res.status(404).json({ error: "Contact not found" });
+      }
+      return res.status(200).json(contact);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: "Failed to delete contact" });
+    }
+  },
+);
+
+export default router;

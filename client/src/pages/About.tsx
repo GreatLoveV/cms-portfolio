@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useGetAbout } from "../hooks/useAbout";
 import AboutForm from "./AboutForm";
+import { AboutSkeleton } from "../components/Skeletons";
 import { useAuth } from "../hooks/useAuth";
 
 const About = () => {
@@ -10,8 +11,7 @@ const About = () => {
   const closeForm = () => {
     setShowForm(false);
   };
-  if (isLoading)
-    return <div className="text-neutral-400 p-6">is loading...</div>;
+  if (isLoading) return <AboutSkeleton />;
   if (isError)
     return <div className="text-red-400 p-6">Error: {error.message}</div>;
 

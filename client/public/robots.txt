@@ -1,0 +1,6 @@
+# Allow all crawlers full access
+User-agent: *
+Allow: /
+
+# Point crawlers at the sitemap (drop one in /public when ready)
+# Sitemap: https://example.com/sitemap.xml

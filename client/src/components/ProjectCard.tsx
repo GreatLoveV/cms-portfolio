@@ -4,9 +4,10 @@ import type { ProjectEntry } from "../types";
 interface ProjectCardProps {
   project: ProjectEntry;
   onEdit?: (project: ProjectEntry) => void;
+  onDelete?: (project: ProjectEntry) => void;
 }
 
-const ProjectCard = ({ project, onEdit }: ProjectCardProps) => {
+const ProjectCard = ({ project, onEdit, onDelete }: ProjectCardProps) => {
   const { token } = useAuth();
   return (
     <div className="bg-neutral-900 border border-white/10 rounded-lg p-6 flex flex-col gap-3 ">
@@ -19,15 +20,28 @@ const ProjectCard = ({ project, onEdit }: ProjectCardProps) => {
       )}
       <div className="flex items-center justify-between">
         <h3 className="text-lg text-white font-medium">{project.title}</h3>
-        {token && onEdit && (
-          <button
-            onClick={() => onEdit(project)}
-            className="text-neutral-400 hover:text-white transition-colors"
-            aria-label="Edit project"
-          >
-            ✎
-          </button>
-        )}
+        {(token && onEdit) || (token && onDelete) ? (
+          <div className="flex gap-2">
+            {token && onEdit && (
+              <button
+                onClick={() => onEdit(project)}
+                className="text-neutral-400 hover:text-white transition-colors"
+                aria-label="Edit project"
+              >
+                ✎
+              </button>
+            )}
+            {token && onDelete && (
+              <button
+                onClick={() => onDelete(project)}
+                className="text-neutral-400 text-sm hover:text-red-400 transition-colors"
+                aria-label="Delete project"
+              >
+                🗑
+              </button>
+            )}
+          </div>
+        ) : null}
       </div>
       <p className="text-sm text-neutral-400 leading-relaxed">
         {project.description}

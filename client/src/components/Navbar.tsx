@@ -20,6 +20,9 @@ const Navbar = () => {
           <Link to="/about" className={linkClass("/about")}>
             About
           </Link>
+          <Link to="/contact" className={linkClass("/contact")}>
+            Contact
+          </Link>
         </div>
       </div>
     </nav>

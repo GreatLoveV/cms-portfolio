@@ -1,5 +1,6 @@
-import { useGetProjects } from "../hooks/useProjects";
+import { useGetProjects, useDeleteProject } from "../hooks/useProjects";
 import ProjectCard from "../components/ProjectCard";
+import { ProjectCardSkeleton } from "../components/Skeletons";
 import { useState } from "react";
 import ProjectForm from "./ProjectForm";
 import type { ProjectEntry } from "../types";
@@ -7,6 +8,7 @@ import { useAuth } from "../hooks/useAuth";
 
 const Projects = () => {
   const { data, isLoading, isError, error } = useGetProjects();
+  const deleteMutation = useDeleteProject();
   const [showForm, setShowForm] = useState(false);
   const [editingProject, setEditingProject] = useState<ProjectEntry | null>(
     null,
@@ -25,8 +27,21 @@ const Projects = () => {
     setEditingProject(null);
     setShowForm(false);
   };
-  if (isLoading) return <p>Loading projects...</p>;
+  const handleDelete = (project: ProjectEntry) => {
+    if (window.confirm(`Delete "${project.title}"? This cannot be undone.`)) {
+      deleteMutation.mutate(project.id);
+    }
+  };
   if (isError) return <p>Error: {error.message}</p>;
+
+  if (isLoading) {
+    return (
+      <div className="max-w-5xl mx-auto px-6 py-12 flex flex-col gap-4">
+        <ProjectCardSkeleton />
+        <ProjectCardSkeleton />
+      </div>
+    );
+  }
 
   const projects = data ?? [];
 
@@ -51,6 +66,7 @@ const Projects = () => {
           <ProjectCard
             key={project.id}
             onEdit={openEditForm}
+            onDelete={handleDelete}
             project={project}
           />
         ))

@@ -30,3 +30,13 @@ export const useUpdateProject = () => {
     },
   });
 };
+
+export const useDeleteProject = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => pService.remove(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
+    },
+  });
+};
